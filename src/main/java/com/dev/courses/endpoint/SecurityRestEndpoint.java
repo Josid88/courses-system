@@ -5,7 +5,10 @@ import com.dev.courses.api.AuthenticationData;
 import com.dev.courses.security.AuthenticationStatus;
 import com.dev.courses.security.SecurityService;
 import com.dev.courses.security.SecurityServiceHardcodedImpl;
+import com.dev.courses.webapp.CoursesContextListener;
+import jakarta.servlet.ServletContext;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -13,13 +16,16 @@ import jakarta.ws.rs.core.Response;
 @Path("security")
 public class SecurityRestEndpoint {
 
+    @Context
+    ServletContext servletContext;
+
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String login(
             @QueryParam("username") String username,
             @QueryParam("password") String password) {
 
-        SecurityService securityService = new SecurityServiceHardcodedImpl();
+        SecurityService securityService = (SecurityService) servletContext.getAttribute(CoursesContextListener.SECURITY_SERVICE);
         AuthenticationData result = securityService.authenticate(username, password);
 
         return result.toString();

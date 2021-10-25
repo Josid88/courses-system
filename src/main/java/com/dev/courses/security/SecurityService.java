@@ -4,6 +4,8 @@ import com.dev.courses.api.AuthenticationData;
 
 public interface SecurityService {
 
-    public AuthenticationData authenticate(String username, String password);
+    AuthenticationData authenticate(String username, String password);
+    AuthenticationData getAuthenticationSession(String token);
+
 
 }
