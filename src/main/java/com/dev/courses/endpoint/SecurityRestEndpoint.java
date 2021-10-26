@@ -4,7 +4,6 @@ import com.dev.courses.api.LoginData;
 import com.dev.courses.api.AuthenticationData;
 import com.dev.courses.security.AuthenticationStatus;
 import com.dev.courses.security.SecurityService;
-import com.dev.courses.security.SecurityServiceHardcodedImpl;
 import com.dev.courses.webapp.CoursesContextListener;
 import jakarta.servlet.ServletContext;
 import jakarta.ws.rs.*;
@@ -36,7 +35,7 @@ public class SecurityRestEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(LoginData loginData) {
 
-        SecurityService securityService = new SecurityServiceHardcodedImpl();
+        SecurityService securityService = (SecurityService) servletContext.getAttribute(CoursesContextListener.SECURITY_SERVICE);
         AuthenticationData result = securityService.authenticate(loginData.getUsername(), loginData.getPassword());
 
         Response.ResponseBuilder responseBuilder = Response.serverError();
