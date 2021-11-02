@@ -1,17 +1,18 @@
 package com.dev.courses.entity;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
 
 @Entity
-@Getter @Setter
-@Table(name = "auth_entity")
-public class AuthenticationEntity {
+@Getter @Setter @ToString
+@Table(name = "user_entity")
+public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "u_id")

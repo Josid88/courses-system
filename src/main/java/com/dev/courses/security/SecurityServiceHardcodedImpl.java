@@ -1,6 +1,8 @@
 package com.dev.courses.security;
 
 import com.dev.courses.api.AuthenticationData;
+import com.dev.courses.dao.UserDao;
+import com.dev.courses.entity.UserEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,24 +11,24 @@ import java.util.UUID;
 
 public class SecurityServiceHardcodedImpl implements SecurityService {
 
-    Map<String, String> authMap = new HashMap<>();
-    Map<String, AuthenticationData> sessionMap = new HashMap<>();
+    private final UserDao userDao;
+    private final Map<String, AuthenticationData> sessionMap = new HashMap<>();
 
-    {
-        authMap.put("admin:admin", "c520035b-5aee-4529-ba11-a0519fd74f9e");
+    public SecurityServiceHardcodedImpl(UserDao userDao){
+        this.userDao = userDao;
     }
 
     @Override
     public AuthenticationData authenticate(String username, String password) {
-        String userId = authMap.get(username + ":" + password);
-        AuthenticationData authenticationResult;
+        UserEntity user = userDao.getUser(username, password);
 
-        if (userId == null) {
+        AuthenticationData authenticationResult;
+        if (user == null) {
             authenticationResult = new AuthenticationData(AuthenticationStatus.REJECT, null, null, null);
 
         } else {
             UUID uuid = UUID.randomUUID();
-            authenticationResult = new AuthenticationData(AuthenticationStatus.AUTHENTICATED, userId, uuid.toString(), username);
+            authenticationResult = new AuthenticationData(AuthenticationStatus.AUTHENTICATED, user.getUId(), uuid.toString(), username);
             sessionMap.put(authenticationResult.getToken(), authenticationResult);
         }
 
